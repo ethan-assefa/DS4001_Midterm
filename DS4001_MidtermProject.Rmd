@@ -5,7 +5,7 @@ date: "10/1/2020"
 output: 
   html_document:
     toc: TRUE
-    theme: readable
+    theme: architect
     toc_float: TRUE
     toc_collapsed: TRUE
 ---
@@ -14,18 +14,61 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r PackagesNeeded}
+install.packages("prettydoc")
+install.packages("tidyverse")
+install.packages("knitr")
+install.packages("googleVis")
+library(prettydoc)
+library(tidyverse)
+library(googleVis)
+```
+
+
 ## Package Overview
 
-```{r GoogleVisPic, out.width= "50%", fig.align='center', fig.cap="GoogleVis Logo"}
+```{r GoogleVisPic, out.width= "100%", fig.align='center', fig.cap="The Google Logo"}
 knitr::include_graphics("Logo.png")
 ```
 
 The package was intended to act as an **interface between R and Google Charts**. The goal was to allow R users to take advantage and create interactive Google chart visualizations without having to upload their data to Google.
 
-```{r HansPic, out.width= "50%", fig.align='center', fig.cap="Hans Rosling"}
+```{r HansPic, out.width= "65%", fig.align='center', fig.cap="Hans Rosling at his TED talk"}
 knitr::include_graphics("Hans.png")
 ```
 
-In 2006, **Hans Rosling** gave an inspiring TED talk about social and economic developments, heavily utilizing data analytics. To better communicate his findings, he and coworkers at *Gapminder* created animated charts. This would popularize the idea or utilization of interactive charts. After *Gapminder* was bought by Google, the authors of the googleVis were inspired by Rosling’s talks and the desire to use interactive data visualization tools to foster the dialogue between data analysts and others. Thus, the googleVis package was born. 
+In 2006, **Hans Rosling** gave an inspiring TED talk about social and economic developments, heavily utilizing data analytics. To better communicate his findings, he and coworkers at *Gapminder* created animated charts. The link to his TED talk can be found [here]().
+
+This would popularize the idea or utilization of interactive charts. After *Gapminder* was bought by Google, the authors of the googleVis were inspired by Rosling’s talks and the desire to use interactive data visualization tools to foster the dialogue between data analysts and others. Thus, the googleVis package was born.
+
+## Background Information
+
+### Version History
+Version history information on googleVis can be found in the [CRAN package archive](https://cran.r-project.org/src/contrib/Archive/googleVis/?C=N;O=A): 
+
+Earliest Instance: **googleVis v0.1.2** ()
+
+Most current Instance: **googleVis 0.6.6** ()
+
+### Usage 
+Intended to create interactive visualizations. Visualizations are more efficiently produced than in base R. Contains non-traditional visual analysis aids such as those below:
+
+- Gauge Charts
+- Google Maps 
+- Tree Maps
+- Sankey Charts
+- Calendar Charts
+- Timeline Charts
+- Motion Charts
+
+... and more. All of these charts are interactive, allowing you to zoom in/zoom out, click on, and view individual data points/groups.
+
+### Dependency to Other Programs/Packages
+Requires R (>= 3.0.2)
+Requires internet connection (to connect to Google servers)
+Requires Flash Player (for Motion Charts)
+Suggested - "devtools","RJSONIO", "knitr", "shiny", "httpuv"
+
+
 
 
