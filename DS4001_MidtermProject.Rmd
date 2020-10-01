@@ -1,0 +1,16 @@
+---
+title: "DS 4001 - GoogleVis Presentation"
+author: "Ethan Assefa, Jenna Mulvihill, Christos Chen, Aditya Kannoth"
+date: "10/1/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r cars}
+summary(cars)
+```
