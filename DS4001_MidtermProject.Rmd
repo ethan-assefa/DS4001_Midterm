@@ -2,14 +2,19 @@
 title: "DS 4001 - GoogleVis Presentation"
 author: "Ethan Assefa, Jenna Mulvihill, Christos Chen, Aditya Kannoth"
 date: "10/1/2020"
-output: html_document
+output: 
+  html_document:
+    toc: TRUE
+    theme: readable
+    toc_float: TRUE
+    toc_collapsed: TRUE
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Package Overview
 
 ```{r cars}
 summary(cars)
