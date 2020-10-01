@@ -18,11 +18,11 @@ knitr::opts_chunk$set(echo = TRUE)
 install.packages("prettydoc")
 install.packages("tidyverse")
 install.packages("knitr")
-install.packages("googleVis")
+# install.packages("googleVis") # Remove and place in another chunk later
 library(prettydoc)
 library(tidyverse)
 library(knitr)
-library(googleVis)
+# library(googleVis) # Remove and place in another chunk later
 ```
 
 
@@ -38,7 +38,9 @@ The package was intended to act as an **interface between R and Google Charts**.
 knitr::include_graphics("Hans.png")
 ```
 
-In 2006, **Hans Rosling** gave an inspiring TED talk about social and economic developments, heavily utilizing data analytics. To better communicate his findings, he and coworkers at *Gapminder* created animated charts. The link to his TED talk can be found [here]().
+In 2006, **Hans Rosling** gave an inspiring TED talk about social and economic developments, heavily utilizing data analytics. To better communicate his findings, he and his coworkers at *Gapminder* created animated charts. 
+
+> The link to his TED talk can be found [here](https://www.ted.com/talks/hans_rosling_the_best_stats_you_ve_ever_seen).
 
 This would popularize the idea or utilization of interactive charts. After *Gapminder* was bought by Google, the authors of the googleVis were inspired by Rosling’s talks and the desire to use interactive data visualization tools to foster the dialogue between data analysts and others. Thus, the googleVis package was born.
 
@@ -53,7 +55,14 @@ Earliest Public Instance: **googleVis v0.2.1** (12/03/2010)
 Most Current Instance: **googleVis 0.6.6** (07/08/2020)
 
 ### Usage 
-Intended to create interactive visualizations. Visualizations are more efficiently produced than in base R. Contains non-traditional visual analysis aids such as those below:
+Whenever the googleVis package is called from the library for the first time, the following warning message appears:
+
+```{r LoadGoogleVis, warning=TRUE}
+install.packages("googleVis")
+library(googleVis)
+```
+
+googleVis was intended to create interactive visualizations. Visualizations are more efficiently produced than in base R. Contains non-traditional visual analysis aids such as those below:
 
 - Gauge Charts
 - Google Maps 
@@ -64,6 +73,16 @@ Intended to create interactive visualizations. Visualizations are more efficient
 - Motion Charts
 
 ... and more. All of these charts are interactive, allowing you to zoom in/zoom out, click on, and view individual data points/groups.
+
+> While using googlevis, visualizations are initiated by ‘gvis’ + ChartType
+
+An example of such code would be:
+```{r ExampleCode, echo=TRUE, eval=FALSE}
+gvisGeoChart() # Gives world map chart
+gvisGauge() # Gives gauge visual
+```
+
+Had this been run, the output would be a geographical map of the world where countries could be highlighted depending on the dataset given. There would be also be a separate output of gauges given certain measurements (again, depending on what data were input).  
 
 ### Dependency to Other Programs/Packages
 Requires R (>= 3.0.2)
@@ -78,11 +97,33 @@ Additionally, some R packages are suggested:
 4. "shiny"
 5. "httpuv"
 
-These complementary packages may be needed to properly run some of the visuals in googleVis.
+These complementary packages above may be needed to properly run some of the code and visuals in googleVis.
 
 ## Examples of Usage
 
 ## Similar Packages
+
+### ggplot2
+```{r GgplotPic, out.width= "50%", fig.align='center', fig.cap=""}
+knitr::include_graphics("ggplot.png")
+```
+
+This package is similar to googleVis because they both are mostly used to create graphs for visualizing data. In both packages there are ways to make bar graphs, line graphs, box plots, and scatter plots. However, one difference between the two is that googleVis has a couple of interesting functions like gvisGauge, gvisGeoChart, and gvisMap, which are different from anything found in ggplot2. Ggplot2 is made up of mostly basic visuals and googleVis has a lot of interesting functions that create plots that aren’t very common and only work with specific data sets. For example, not every data set can be used to create a map like in gvisMap in googleVis, but most datasets can be used for making a scatterplot, like in ggplot2.
+
+### animation
+```{r AnimationPic, out.width= "50%", fig.align='center', fig.cap=""}
+knitr::include_graphics("animation.png")
+```
+
+The animation package is similar to googleVis because it is used to create visualizations, just like what googleVis is used for. However, the functions within are a bit different. Most of the functions in googleVis are used to make graphs, but animation is used to create other types of visuals. For example, animation can be used to create GIF animations and googleVis cannot. Many of the functions within animation are very specific, being used to create specific types of graphics for specific data. In googleVis, most of the graphics could be used for multiple data sets if they include the variables needed. Animation also includes some data sets within the package to work with, such as CLELAL09. 
+
+### rCharts
+```{r RchartsPic, out.width= "50%", fig.align='center', fig.cap=""}
+knitr::include_graphics("rcharts.png")
+```
+
+Like googleVis, rCharts creates visualizations for data. The package includes the function Leaflet, which creates a map like the gvisMap function. This is something not found in many of the other packages that visualize data. There are other similar functions between the two packages. rCharts is used to make scatter plots, bar graphs, line graphs, and boxplots, just like many other packages (including googleVis). The only big difference between the two packages is that the plots all look a little different. The way graphs are formatted ends up being different between the two packages.
+
 
 ## Reflection
 
