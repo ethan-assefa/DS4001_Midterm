@@ -2,16 +2,15 @@
 title: "DS 4001 - GoogleVis Presentation"
 author: "Ethan Assefa, Jenna Mulvihill, Christos Chen, Aditya Kannoth"
 date: "10/1/2020"
-output: 
-  html_document:
-    toc: TRUE
+output:
+  prettydoc::html_pretty:
     theme: architect
-    toc_float: TRUE
-    toc_collapsed: TRUE
+    highlight: github
+    toc: TRUE
 ---
 
 ```{r Setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE, warning=FALSE, message=FALSE, error=FALSE)
 ```
 
 ```{r PackagesNeeded}
@@ -40,7 +39,7 @@ knitr::include_graphics("Hans.png")
 
 In 2006, **Hans Rosling** gave an inspiring TED talk about social and economic developments, heavily utilizing data analytics. To better communicate his findings, he and his coworkers at *Gapminder* created animated charts. 
 
-> The link to his TED talk can be found [here](https://www.ted.com/talks/hans_rosling_the_best_stats_you_ve_ever_seen).
+> The link to his TED talk *"Debunking Third-World Myths With The Best Stats You've Ever Seen"* can be found [here](https://www.ted.com/talks/hans_rosling_the_best_stats_you_ve_ever_seen).
 
 This would popularize the idea or utilization of interactive charts. After *Gapminder* was bought by Google, the authors of the googleVis were inspired by Rosling’s talks and the desire to use interactive data visualization tools to foster the dialogue between data analysts and others. Thus, the googleVis package was born.
 
@@ -78,11 +77,15 @@ googleVis was intended to create interactive visualizations. Visualizations are 
 
 An example of such code would be:
 ```{r ExampleCode, echo=TRUE, eval=FALSE}
-gvisGeoChart() # Gives world map chart
-gvisGauge() # Gives gauge visual
+# Gives linechart visual
+gvisLineChart(df, 
+              xvar="time", 
+              yvar=c("Measure 1","Measure 2"),
+              options=list()
+              ) 
 ```
 
-Had this been run, the output would be a geographical map of the world where countries could be highlighted depending on the dataset given. There would be also be a separate output of gauges given certain measurements (again, depending on what data were input).  
+Had this been run, the output would be a Line Chart of its dataset. It would contain two lines (of measure 1 and measure 2) that would show changes over time. The *options=* argument allows for more minute customizations to the theming and aesthetics of the plot. The plot would have been interactive and powered through Google engines.   
 
 ### Dependency to Other Programs/Packages
 Requires R (>= 3.0.2)
@@ -101,6 +104,121 @@ These complementary packages above may be needed to properly run some of the cod
 
 ## Examples of Usage
 
+### Geochart
+Here we take advantage of the **gvisGeoChart()** function, along with the Population dataset from googleVis, to create an interactive world map colored by country population. 
+
+```{r Geochart, results='asis'}
+# Use sample dataset on country's pop from googleVis
+PopInfo <- Population
+
+# Create geochart of world based on population  
+PopMap <- gvisGeoChart(PopInfo, locationvar="Country", 
+                 colorvar="Population",
+                 options=list(title="World Countries by Population",
+                              height=500,
+                              calendar="{yearLabel: { fontName: 'Times-Roman',
+                               fontSize: 32, color: '#1A8763', bold: true}}"))
+plot(PopMap)
+```
+
+Looking at the visual above, it can be seen that China and India have the highest populations, with both containing over a billion people. Runner-ups include the United States, Indonesia,  Brazil, Nigeria, and Russia.
+
+### Word Tree
+When working with qualitative or categorical data, the function **gvisWordTree()** can allow a cursory visual of how often words or phrases can be found in a dataset (such as a written passage or the searches on webpage).   
+
+```{r WordTree,results='asis'}
+word_tree <- gvisWordTree(Cats, sizevar = "Size", options = list(backgroundColor='#1EBECB', 
+                                      height=700,
+                                      colors='#000000'))
+print(word_tree, 'chart')
+```
+
+This is an example showing the word capabilities of googleVis word tree chart. In the plot above, a data frame of phrases are displayed with sizes varying depending on the number of times the word is utilized. The different branches lead to possible pathways in the phrasing, with branches spliting off to connect words used together. At the top, it can be seen one possible path has "cats" -> "are" -> "better than" -> "dogs", but another fork leads to "hamsters" or "kittens". 
+
+
+### Timeline
+Data taking place over time is best displayed with the Timeline plot and, in googleVis, can be called with the function **gvisTimeline()**. 
+
+```{r}
+war_data_TL <- data.frame(Position=c(rep("War", 11)),
+                    Name=c("Great Britain", "Mexico", "Spain",
+                           "Germany", "Austria Hungary", "Japan", "Germany", "Italy", "Bulgaria","Hungary", "Rumania"),
+                    start=as.Date(x= c("1812-06-07", "1846-05-12", 
+                                          "1898-04-25", "1917-04-06", "1917-12-07", "1941-12-08", "1941-12-11", "1941-12-11", "1942-06-04","1942-06-04","1942-06-04")),
+                    end=as.Date(x= c("1815-02-18", "1848-02-02", 
+                                          "1898-12-10", "1918-11-11", "1918-11-11", "1945-09-02", "1945-09-02", "1945-09-02", "1945-09-02","1945-09-02","1945-09-02")))
+
+Timeline <- gvisTimeline(data= war_data_TL, 
+                         rowlabel="Name",
+                         barlabel="Position",
+                         start="start", 
+                         end="end",
+                         options=list(timeline="{groupByRowLabel:false}",
+                                      backgroundColor='E8E8E8', 
+                                      height=550,
+                                      colors='#D70000')) 
+plot(Timeline)
+```
+
+Here we are shown a timeline of the countries that the United States has had official wars with and duration and time period of those wars. This list does not include unofficial military actions, peacekeeping, insurrections, skirmishes, etc., where a deceleration was not given. The data shows that the most recent war where the U.S. gave a formal deceleration of war was **WWII**, meanwhile the first formal war was the **War of 1812** with Britain. 
+
+### Gauge Chart
+Another unique and unusual data visual, the Gauge chart allows for a numerical measure for multiple categories. googleVis contains a function called **gvisGauge()** that allows for such coding.
+
+```{r}
+# Create dataframe of class grades
+class_grade = data.frame(Name = c("Clown", "Alyssa", "Barney", "Brian", "Dora", "Nancy"), Grade = c(100, 52, 95, 82, 76, 88))
+
+Gauge <-  gvisGauge(class_grade, 
+                    options=list(min=0, max=100, greenFrom=75,
+                                 greenTo=100, yellowFrom=60, yellowTo= 75,
+                                 redFrom=0, redTo=60, width=600, height=450))
+plot(Gauge)
+
+```
+
+Above, a number of gauges show the class grades for 6 students, with each gauge representing an individual person. Here, Clown is seen to be the student with the highest grade in the class, while Alyssa has the lowest.  
+
+### Calendar
+When working with data over a period of many days, such as months or years, the Calendar plot shows daily fluctuatuions in a measure of the course of the year and can highlight long-term patterns that may not be seen otherwise. The function **gvisCalendar()** in googleVis allows for Calendar plots to be made.
+
+```{r}
+calendar <- gvisCalendar(Andrew, 
+                    datevar="Date/Time UTC", 
+                    numvar="Pressure_mb",
+                    options=list(
+                      title="Daily Pressure for Hurricane Andrew",
+                      height=500,
+                      calendar="{yearLabel: { fontName: 'Times-Roman',
+                               fontSize: 32, color: '#1A8763', bold: true},
+                               cellSize: 10,
+                               cellColor: { stroke: 'red', strokeOpacity: 0.2 },
+                               focusedCellColor: {stroke:'red'}}")
+)
+plot(calendar)
+```
+
+In this particular 
+
+### Motion Chart
+The motion chart shows an animated visual of a plot with moving data, this can be used to call attention to gradual change in the measures, or to simply make the presentation visuals more exciting and attractive. The function **gvisMotionChart()** is what allows for the display below:
+
+```{r}
+stores <- c('Store 1', 'Store 1', 'Store 2', 'Store 2', 'Store 3', 'Store 3')
+months1 <- as.Date(c('2020-01-01', '2020-02-01', '2020-01-01', '2020-02-01', '2020-01-01', '2020-02-01'))
+revenues <- c(72, 57, 45, 43, 65, 59)
+costs <- c(70, 45, 34, 31, 60, 57)
+profits <- c(2, 12, 11, 12, 5, 2)
+df <- data.frame(stores, months1, revenues, costs, profits)
+ 
+Motion=gvisMotionChart(df, 
+                       idvar="stores", 
+                       timevar="months1")
+plot(Motion)
+```
+
+As we can see
+
 ## Similar Packages
 
 ### ggplot2
@@ -110,20 +228,72 @@ knitr::include_graphics("ggplot.png")
 
 This package is similar to googleVis because they both are mostly used to create graphs for visualizing data. In both packages there are ways to make bar graphs, line graphs, box plots, and scatter plots. However, one difference between the two is that googleVis has a couple of interesting functions like gvisGauge, gvisGeoChart, and gvisMap, which are different from anything found in ggplot2. Ggplot2 is made up of mostly basic visuals and googleVis has a lot of interesting functions that create plots that aren’t very common and only work with specific data sets. For example, not every data set can be used to create a map like in gvisMap in googleVis, but most datasets can be used for making a scatterplot, like in ggplot2.
 
-### animation
-```{r AnimationPic, out.width= "50%", fig.align='center', fig.cap=""}
-knitr::include_graphics("animation.png")
+```{r GgplotExample}
+# Create Example dataframe to use
+CarPurchase <- data_frame(`Vehicle Type` = c("Minivan", "Sedan", "Pickup Truck", "Hatchback", "Convertable"), `Purchase Count` =  c(38, 124, 52, 89, 13))
+
+# Bring in ggplot2
+library(ggplot2)
+
+# Create ggplot bar chart from the example dataset
+ggplot(data = CarPurchase, aes(x=`Vehicle Type`, y=`Purchase Count`)) +
+  geom_bar(stat="identity") + 
+  labs(title = "Dealership Purchases", x = "Vehicle Type", y = "Purchase Count (past week)") +
+  geom_text(aes(label=`Purchase Count`), vjust=1.6, color="white", size=3.5) + 
+  theme_dark()
+
 ```
 
-The animation package is similar to googleVis because it is used to create visualizations, just like what googleVis is used for. However, the functions within are a bit different. Most of the functions in googleVis are used to make graphs, but animation is used to create other types of visuals. For example, animation can be used to create GIF animations and googleVis cannot. Many of the functions within animation are very specific, being used to create specific types of graphics for specific data. In googleVis, most of the graphics could be used for multiple data sets if they include the variables needed. Animation also includes some data sets within the package to work with, such as CLELAL09. 
+The bar chart above shows just a small sample of what the ggplot package can do. A simulated dataset of vehicle purchases at a dealership over the week was emulated. With a modular, recursive system that allows a sequential layering approach, the user can essentially act as a painter adding each successive part to the graph. 
+
+### animation
+```{r AnimationPic, out.width= "50%", fig.align='center', fig.cap=""}
+# knitr::include_graphics("animation.png")
+```
+
+The animation package is similar to googleVis because it is used to create visualizations, just like what googleVis is used for. However, the functions within are a bit different. Most of the functions in googleVis are used to make graphs, but animation is used to create other types of visuals. For example, animation can be used to create GIF animations and googleVis cannot. Many of the functions within animation are very specific, being used to create specific types of graphics for specific data. In googleVis, most of the graphics could be used for multiple data sets if they include the variables needed. Animation also includes some data sets within the package to work with, such as CLELAL09.
+
+```{r AnimationExample}
+# Bring in animation package
+install.packages("animation")
+library(animation)
+
+# Creates Rosling Bubble animation for animated bubble plots
+ani.options(interval = 0.2, nmax = 50)
+par(mar = c(4, 4, 0.2, 0.2))
+Rosling.bubbles()
+```
+
+The animation package actually allows users to recreate the bubble famously used by Hans Rosling in his seminal TED talk mentioned earlier. An bubble plot, ideal to show trends in data over time, is shown above with random data as an example of what the animation package can be utilized to do.  
 
 ### rCharts
 ```{r RchartsPic, out.width= "50%", fig.align='center', fig.cap=""}
-knitr::include_graphics("rcharts.png")
+# knitr::include_graphics("rcharts.png")
 ```
 
 Like googleVis, rCharts creates visualizations for data. The package includes the function Leaflet, which creates a map like the gvisMap function. This is something not found in many of the other packages that visualize data. There are other similar functions between the two packages. rCharts is used to make scatter plots, bar graphs, line graphs, and boxplots, just like many other packages (including googleVis). The only big difference between the two packages is that the plots all look a little different. The way graphs are formatted ends up being different between the two packages.
 
+```{r rChartsExample}
+# Bring in the rCharts package
+# install.packages("rCharts")
+# library(rCharts)
+```
+
+
 
 ## Reflection
+
+### Pros
+- There are a wide variety of charts and graphs that are very unique to this package. For example, the gvisGauge, gvisWordTree, and gvisCalendar functions are different from the basic plots found in most packages.
+- The package allows the ability to take advantage of the standardized graphics that are available within Google Charts. In an effort to better protect user privacy, this data does not need to be uploaded to google if done via googleVis.
+
+
+### Cons 
+-Since many of the functions are unique, only certain datasets can be used for each of the functions because they need specific variables to work.
+-In order to be able to utilize the package, the user needs to be connected to the internet, making it difficult for underprivileged communities and those who do not have constant access to the internet.
+-The options=list() part of each of the functions can be confusing and sometimes certain parts of it don’t work with certain functions
+
+### Feature Suggestions
+-If there were more datasets within the package it would be easier to use all of the functions. Many of the functions work for only one of the datasets within googleVis and it would be better to have more of those datasets.
+-Improve the documentation, specifically of the potential possibilities located within the options argument. Examples could be provided such that options are consistent within the options argument of different googleVis methods as it appears that some arguments within options work for certain visualizations but not for others.
 
